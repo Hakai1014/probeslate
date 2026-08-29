@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Test your microphone for buzzing and persistent 50 Hz / 60 Hz mains-like hum directly in your browser. Free, private, and no signup required." />
+  <meta name="robots" content="index,follow,max-image-preview:large" />
+  <meta name="theme-color" content="#f7f7f5" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Microphone Buzz & Hum Test – Detect 50/60 Hz Noise | ProbeSlate" />
+  <meta property="og:url" content="https://probeslate.com/audio/microphone-buzz-test/" />
+  <meta property="og:image" content="https://probeslate.com/audio/microphone-buzz-test/og-card.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:description" content="Detect persistent 50 Hz / 60 Hz mains-like hum and buzzing from your microphone. Audio is processed locally in your browser." />
+  <meta name="twitter:card" content="summary_large_image" />
+  <title>Microphone Buzz & Hum Test – Detect 50/60 Hz Noise | ProbeSlate</title>
+  <link rel="canonical" href="https://probeslate.com/audio/microphone-buzz-test/" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="nav-shell">
+      <a class="wordmark" href="/" aria-label="ProbeSlate home">
+        <span class="mark" aria-hidden="true">∿</span>
+        <span>ProbeSlate</span>
+      </a>
+      <nav class="nav-links" aria-label="Page navigation">
+        <a href="#how-it-works">How it works</a>
+        <a href="#results-guide">Results</a>
+        <a href="#methodology">Methodology</a>
+        <a href="#privacy">Privacy</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top" class="shell">
+    <section class="hero card tool-card">
+      <div class="hero-copy">
+        <p class="eyebrow">Free browser microphone diagnostic</p>
+        <h1>Microphone Buzz &amp; Hum Test</h1>
+        <p class="lede">Check your microphone for persistent <strong>50 Hz / 60 Hz hum, buzzing and harmonically related tones</strong> — directly in your browser.</p>
+
+        <div class="trust-row" aria-label="Tool properties">
+          <span><b aria-hidden="true">✓</b> No signup</span>
+          <span><b aria-hidden="true">✓</b> Audio stays on your device</span>
+          <span><b aria-hidden="true">✓</b> About 10 seconds</span>
+        </div>
+      </div>
+
+      <div class="start-panel">
+        <div class="notice warning compact-notice">
+          <strong>For a cleaner result:</strong> stay quiet and, if practical, turn off nearby fans or air conditioning. Acoustic motors can produce tones that resemble electrical hum.
+        </div>
+
+        <label class="field-label" for="micSelect">Microphone input</label>
+        <select id="micSelect" class="control">
+          <option value="">Default microphone</option>
+        </select>
+
+        <button id="startButton" class="primary-button">Start microphone test</button>
+        <p id="permissionHint" class="small muted centered">Your browser will ask for microphone permission. The audio itself is not uploaded.</p>
+      </div>
+    </section>
+
+    <section id="testCard" class="card hidden">
+      <div class="test-header">
+        <div>
+          <p class="eyebrow">Measurement in progress</p>
+          <h2 id="testStatus" role="status" aria-live="polite" aria-atomic="true">Preparing microphone…</h2>
+        </div>
+        <div id="countdown" class="countdown" aria-hidden="true">—</div>
+      </div>
+
+      <div class="meter" aria-label="Microphone level">
+        <div id="meterFill" class="meter-fill"></div>
+      </div>
+      <p id="meterLabel" class="small muted" aria-hidden="true">Input level</p>
+
+      <div id="processingWarning" class="notice info hidden"></div>
+      <div id="deviceWarning" class="notice info hidden"></div>
+      <div id="interruptionWarning" class="notice warning hidden"></div>
+      <button id="cancelActiveButton" class="text-button hidden">Cancel and stop microphone</button>
+    </section>
+
+    <section id="resultCard" class="card hidden">
+      <p class="eyebrow">Your result</p>
+      <h2 id="resultTitle" tabindex="-1">Result</h2>
+      <p id="resultSummary" class="lede result-summary"></p>
+
+      <div class="result-grid">
+        <div class="metric"><span>Pattern</span><strong id="patternValue">—</strong></div>
+        <div class="metric"><span>Strength</span><strong id="strengthValue">—</strong></div>
+        <div class="metric"><span>Confidence</span><strong id="confidenceValue">—</strong></div>
+      </div>
+
+      <div id="validityNotice" class="notice info hidden"></div>
+      <div id="micActiveNotice" class="notice info hidden">
+        <strong>Microphone still active:</strong> the same microphone session is being kept open only so an optional Before/After comparison can use the exact same capture chain. Choose a comparison or end the session below.
+      </div>
+
+      <details class="details">
+        <summary>Technical details</summary>
+        <div class="technical-grid">
+          <div><span>AudioContext sample rate</span><strong id="sampleRateValue">—</strong></div>
+          <div><span>Median input RMS</span><strong id="rmsValue">—</strong></div>
+          <div><span>FFT size</span><strong>32768</strong></div>
+          <div><span>Temporal frames</span><strong id="snapshotValue">—</strong></div>
+          <div><span>FFT window duration</span><strong id="windowValue">—</strong></div>
+          <div><span>Frame hop</span><strong id="hopValue">—</strong></div>
+        </div>
+        <div id="harmonicTableWrap"></div>
+      </details>
+
+      <p class="small muted methodology-note">This tool detects persistent spectral patterns consistent with mains-related hum. It cannot prove that a charger, ground loop, cable, USB port, audio jack or other physical component is faulty.</p>
+
+      <section id="comparisonOffer" class="comparison-offer hidden">
+        <div>
+          <p class="eyebrow">Optional diagnostic step</p>
+          <h3>Optional laptop power comparison</h3>
+          <p class="small">If you are testing on a laptop, you can run a cleaner Before/After comparison using the same microphone session. Change only one variable: disconnect external power while keeping the same power/performance mode and microphone position.</p>
+        </div>
+        <button id="prepareComparisonButton" class="secondary-button">Compare laptop power state</button>
+        <button id="endSessionButton" class="text-button">End comparison session</button>
+      </section>
+
+      <section id="comparisonInstructions" class="comparison-instructions hidden">
+        <p class="eyebrow">Comparison test</p>
+        <h3>Change only one variable</h3>
+        <ol class="instruction-list">
+          <li>Disconnect only the laptop charger/power adapter, if safe and practical.</li>
+          <li>Keep Windows/macOS power or performance mode unchanged.</li>
+          <li>Keep the laptop, microphone and your body position as unchanged as practical.</li>
+          <li>Do not switch fans, HVAC or nearby devices on/off.</li>
+          <li>When the charger is unplugged, click the button below. The tool will wait 15 seconds before measuring.</li>
+        </ol>
+        <div class="notice info"><strong>Microphone remains active during this comparison.</strong> This avoids reopening the capture chain between Before and After.</div>
+        <button id="runComparisonButton" class="primary-button">Charger unplugged — start 15-second settle</button>
+        <button id="cancelComparisonButton" class="text-button">Cancel comparison and stop microphone</button>
+      </section>
+
+      <button id="retestButton" class="primary-button">Start a fresh test</button>
+    </section>
+
+    <section id="comparisonCard" class="card hidden">
+      <p class="eyebrow">Before / after comparison</p>
+      <h2 id="comparisonTitle" tabindex="-1">Comparison result</h2>
+      <p id="comparisonSummary" class="lede"></p>
+
+      <div class="comparison-grid">
+        <div class="comparison-metric"><span>Before</span><strong id="beforePatternValue">—</strong><small id="beforeConfidenceValue">—</small></div>
+        <div class="comparison-arrow" aria-hidden="true">→</div>
+        <div class="comparison-metric"><span>After</span><strong id="afterPatternValue">—</strong><small id="afterConfidenceValue">—</small></div>
+      </div>
+
+      <div id="comparisonEvidence"></div>
+
+      <div class="notice info comparison-caveat">
+        <strong>Interpret carefully:</strong> this comparison only shows whether the measured tonal pattern changed after the power-state change. It does not identify a defective charger or prove an electrical ground loop. Small dB differences may simply reflect normal measurement or room variation.
+      </div>
+
+      <details class="details"><summary>Comparison technical details</summary><div id="comparisonTableWrap"></div></details>
+      <button id="newSessionButton" class="primary-button">Start a new test</button>
+    </section>
+
+    <section id="how-it-works" class="card content-card anchor-section">
+      <p class="eyebrow">Quick guide</p>
+      <h2>How to use the microphone hum test</h2>
+      <div class="steps-grid">
+        <article><span class="step-number">1</span><h3>Select your microphone</h3><p>Choose the input that actually has the buzzing or hum problem. Wired headset, USB and built-in microphones can all be tested.</p></article>
+        <article><span class="step-number">2</span><h3>Stay quiet during measurement</h3><p>The test listens to the background signal for several seconds and checks whether low-frequency tones persist over time.</p></article>
+        <article><span class="step-number">3</span><h3>Read the pattern, not just one peak</h3><p>A single 50 Hz or 60 Hz peak is not enough. The tool looks for multiple persistent, harmonically related components.</p></article>
+      </div>
+    </section>
+
+    <section id="results-guide" class="card content-card anchor-section">
+      <p class="eyebrow">Understanding the output</p>
+      <h2>What does the result mean?</h2>
+      <div class="explain-grid">
+        <article><h3>No clear pattern</h3><p>The measurement did not find enough persistent harmonically related tones to identify a 50 Hz or 60 Hz mains-like family. This does <em>not</em> mean the microphone is completely noise-free.</p></article>
+        <article><h3>Mains-like pattern detected</h3><p>Several persistent components line up with a 50 Hz or 60 Hz harmonic family. This can be consistent with electrical interference, but acoustic motors, fans and other tonal sources can imitate the same spectrum.</p></article>
+        <article><h3>Low or medium confidence</h3><p>The evidence is incomplete, ambiguous or affected by browser/device limitations. Treat it as a clue rather than a hardware diagnosis.</p></article>
+      </div>
+    </section>
+
+    <section class="card content-card">
+      <p class="eyebrow">Troubleshooting context</p>
+      <h2>Why can a microphone buzz or hum?</h2>
+      <p>Microphone buzzing can enter anywhere in the capture chain — the microphone capsule, an analog headset cable, a 3.5 mm jack, USB power, an audio interface, the computer's power system or the surrounding acoustic environment. A browser spectrum test cannot identify the physical cause from one measurement alone.</p>
+      <div class="cause-list">
+        <div><strong>Laptop power or grounding path</strong><span>A charger or power state can sometimes change the measured pattern, which is why the tool offers an optional same-session comparison.</span></div>
+        <div><strong>Analog cables and connectors</strong><span>Poor contact, shielding or an analog input stage can introduce tonal interference or broadband noise.</span></div>
+        <div><strong>USB / interface power</strong><span>USB microphones and audio interfaces can pick up interference through their power or signal path.</span></div>
+        <div><strong>Fans, HVAC and motors</strong><span>A microphone hears acoustic pressure. Mechanical sources can produce 50/60 Hz-related tones and harmonics that resemble electrical hum.</span></div>
+      </div>
+    </section>
+
+    <section id="methodology" class="card content-card anchor-section">
+      <p class="eyebrow">Transparent methodology</p>
+      <h2>What does this test actually measure?</h2>
+      <p>The tool uses the browser's Web Audio API and analyzes the selected microphone locally. In the current measurement engine, a 32,768-sample FFT is evaluated in overlapping temporal frames. Rather than declaring hum from one spectral spike, each target frequency is evaluated over time.</p>
+      <ul class="clean-list">
+        <li><strong>50 Hz family:</strong> 50, 100, 150, 200 and 250 Hz.</li>
+        <li><strong>60 Hz family:</strong> 60, 120, 180, 240 and 360 Hz.</li>
+        <li><strong>Temporal persistence:</strong> median prominence and the lower quartile (P25) are used so brief spikes are less likely to count as persistent evidence.</li>
+        <li><strong>Harmonic requirement:</strong> at least two persistent components are required before a mains-like family is classified.</li>
+        <li><strong>Browser processing:</strong> echo cancellation, noise suppression and automatic gain control are requested off where supported. If processing remains active, confidence may be reduced.</li>
+      </ul>
+      <p class="small muted">This is an engineering diagnostic heuristic for consumer browsers, not a calibrated electrical instrument, acoustic standard measurement or proof of a specific hardware fault.</p>
+    </section>
+
+    <section class="card content-card">
+      <p class="eyebrow">Why 50 Hz or 60 Hz?</p>
+      <h2>Why does electrical hum often appear at these frequencies?</h2>
+      <p>AC mains systems operate at a nominal line frequency that is commonly 50 Hz or 60 Hz depending on the country. Interference can also appear at harmonics such as 100/120 Hz and higher multiples. Power-supply behavior may make a harmonic more prominent than the fundamental, which is why the test examines a family of frequencies instead of relying on only 50 Hz or 60 Hz.</p>
+    </section>
+
+    <section id="privacy" class="card content-card anchor-section">
+      <p class="eyebrow">Privacy by design</p>
+      <h2>Your microphone audio stays in your browser</h2>
+      <p>The microphone stream is processed on your device for the duration of the test. ProbeSlate does not upload or store the microphone audio in this tool. Closing or ending the measurement stops the active microphone track.</p>
+      <p class="small muted">A full site privacy policy will be added before advertising or analytics that require additional disclosures are enabled.</p>
+    </section>
+
+    <section class="card content-card faq-card">
+      <p class="eyebrow">FAQ</p>
+      <h2>Microphone hum test questions</h2>
+      <details><summary>Can this prove that I have a ground loop?</summary><p>No. A mains-like spectrum is evidence about the audio signal, not proof of a particular physical cause. Comparison tests can provide clues, but they cannot prove that a charger, cable or ground loop is faulty.</p></details>
+      <details><summary>Can I use a headset microphone?</summary><p>Yes. The test analyzes whichever microphone input you select. With an analog headset, the measured signal includes the entire capture path: microphone, cable, connector, computer audio input and browser/OS processing.</p></details>
+      <details><summary>Why does the test ask me to stay quiet?</summary><p>The goal is to measure persistent background tones. Speech and other changing sounds add spectral energy that is unrelated to the hum being tested.</p></details>
+      <details><summary>Does a result of “No clear pattern” mean my microphone is perfect?</summary><p>No. It only means the test did not identify enough persistent 50/60 Hz-family evidence. The microphone may still have hiss, clipping, intermittent static or other noise that this specific tool is not designed to classify.</p></details>
+      <details><summary>Why can a fan affect the result?</summary><p>A microphone cannot know whether a tone came through an electrical path or arrived acoustically. Fans, HVAC systems and motors can create persistent low-frequency tones and harmonics.</p></details>
+    </section>
+
+    <section id="devCard" class="card hidden">
+      <p class="eyebrow">Developer validation mode</p>
+      <h2>5-run repeatability check</h2>
+      <p class="lede">Runs five same-session measurements without changing conditions. This is a practical repeatability check, not a formal statistical validation.</p>
+      <div class="notice warning"><strong>For this check:</strong> keep the room, microphone, charger state, power mode and your position as unchanged as possible for the whole run.</div>
+      <button id="devRunButton" class="primary-button">Run 5-repeatability validation</button>
+      <button id="devCancelButton" class="text-button hidden">Cancel validation</button>
+      <p id="devStatus" class="small muted"></p>
+      <div id="devOutput"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-shell">
+      <p><strong>ProbeSlate</strong> · Browser-based device diagnostics.</p>
+      <p class="small muted">This tool provides signal observations, not professional electrical or acoustic diagnosis.</p>
+    </div>
+  </footer>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
