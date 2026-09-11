@@ -25,7 +25,7 @@
     <section class="hero">
       <p class="eyebrow">Privacy</p>
       <h1>Privacy at ProbeSlate</h1>
-      <p class="lede">The current microphone diagnostic processes microphone audio locally in your browser.</p>
+      <p class="lede">The microphone diagnostics process microphone audio locally in your browser.</p>
     </section>
 
     <section class="section prose">
@@ -33,6 +33,7 @@
       <p>The Microphone Buzz &amp; Hum Test requests browser microphone permission only after you start a test. Its current implementation does not upload or store microphone audio, and it does not send the measured spectrum to a ProbeSlate server.</p>
       <p>Your browser or operating system may still display its normal microphone-use indicator while a test or optional same-session comparison is active.</p>
 
+      <p>The Microphone Dropout &amp; Crackle Test also processes audio transiently in browser memory. It does not upload or save audio recordings. Measurement summaries and your optional comparison note remain in the page memory until cleared or the page is closed. The optional retained microphone connection expires after 60 seconds between runs; End session releases it immediately. Hiding the page cancels an active test and releases the microphone.</p>
       <h2>Website analytics</h2>
       <p>ProbeSlate currently uses Cloudflare Web Analytics to measure page views and page-load performance. Cloudflare describes this service as privacy-first and cookie-free, and states that it does not collect or use visitors' personal data. The analytics service does not receive microphone audio or the spectrum measured by the microphone diagnostic. You can read <a href="https://developers.cloudflare.com/web-analytics/about/" rel="noopener">Cloudflare's Web Analytics documentation</a> for more information.</p>
 
@@ -41,7 +42,7 @@
 
       <h2>Contact</h2>
       <p>Privacy questions can be sent through the contact information published on the Contact page.</p>
-      <p class="muted">Last updated: August 2026.</p>
+      <p class="muted">Last updated: September 2026.</p>
     </section>
   </main>
 
